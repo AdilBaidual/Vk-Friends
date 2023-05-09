@@ -1,0 +1,278 @@
+openapi: 3.0.0
+info:
+  title: OpenAPI спецификация для сервиса друзей
+  version: 0.0.1
+servers:
+  - url: http://localhost:8000/api/
+    description: Dev server
+paths:
+  /register/{userName}:
+    post:
+      summary: Регистарция
+      operationId: registerNewUser
+      parameters:
+        - name: userName
+          in: path
+          required: true
+          description: Имя пользователя
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Успешная регистарция
+          content: {}
+        '400':
+          description: Такое имя уже занято
+          content: {}
+        'default':
+          description: Неожиданная ошибка
+          content: 
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /friend/request/{userName1}/{userName1}:
+    post:
+      summary: Заявка в друзья
+      operationId: sendFriendRequest
+      parameters:
+        - name: userName1
+          in: path
+          required: true
+          description: Имя пользователя
+          schema:
+            type: string
+            format: uuid
+        - name: userName2
+          in: path
+          required: true
+          description: Имя пользователя, которому отправляют заявку
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Заявка отправлена
+          content: {}
+        '400':
+          description: Пользователь не найден
+          content: {}
+        '401':
+          description: Пользователь уже ваш друг
+          content: {}
+        '402':
+          description: Вы уже отправили заявку
+          content: {}
+        'default':
+          description: Неожиданная ошибка
+          content: 
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /friend/accept/{application_id}:
+    post:
+      summary: Принять заявку
+      operationId: acceptFriend
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          description: Номер заявки
+          schema:
+            type: integer
+            format: uuid
+      responses:
+        '200':
+          description: Заявка принята
+          content: {}
+        '400':
+          description: заявка не найден
+          content: {}
+        'default':
+          description: Неожиданная ошибка
+          content: 
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /friend/refuse/{application_id}:
+    post:
+      summary: отклонить заявку
+      operationId: refuseFriend
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          description: Номер заявки
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Заявка отклонена
+          content: {}
+        '400':
+          description: заявка не найден
+          content: {}
+        'default':
+          description: Неожиданная ошибка
+          content: 
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /applications/incoming/{userName}:
+    get:
+      summary: посмотреть входящие заявки
+      operationId: getIncomingApplications
+      parameters:
+        - name: userName
+          in: path
+          required: true
+          description: Имя пользователя
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: получение входящих заявок
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Application"
+        '400':
+          description: пользователь не найден
+          content: {}
+        'default':
+          description: Неожиданная ошибка
+          content: 
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /applications/outgoing/{userName}:
+    get:
+      summary: посмотреть исходящие заявки
+      operationId: getOutgoingApplications
+      parameters:
+        - name: userName
+          in: path
+          required: true
+          description: Имя пользователя
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: получение исходящих заявок
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Application"
+        '400':
+          description: пользователь не найден
+          content: {}
+        'default':
+          description: Неожиданная ошибка
+          content: 
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /friendList/{userName}:
+    get:
+      summary: посмотреть список друзей заявки
+      operationId: getFriendList
+      parameters:
+        - name: userName
+          in: path
+          required: true
+          description: Имя пользователя
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: получение списка друзей
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        '400':
+          description: пользователь не найден
+          content: {}
+        'default':
+          description: Неожиданная ошибка
+          content: 
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /status/{userName1}/{userName1}:
+    get:
+      summary: Посмтореть статус
+      operationId: getStatus
+      parameters:
+        - name: userName1
+          in: path
+          required: true
+          description: Имя пользователя
+          schema:
+            type: string
+            format: uuid
+        - name: userName2
+          in: path
+          required: true
+          description: Имя друга
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: статус получен
+          content: {}
+        '400':
+          description: Пользователь не найден
+          content: {}
+        'default':
+          description: Неожиданная ошибка
+          content: 
+            application/json;charset=UTF-8:
+              schema:
+                type: string
+
+
+
+components:
+  schemas:
+    Error:
+      type: object
+      required: 
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+    Application:
+      type: object
+      required: 
+        - id
+        - userName
+      properties:
+        id:
+          type: integer
+        userName:
+          type: string
+    User:
+      type: object
+      required: 
+        - id
+        - userName
+      properties:
+        id:
+          type: integer
+        userName:
+          type: string
