@@ -31,7 +31,7 @@ paths:
             application/json;charset=UTF-8:
               schema:
                 $ref: "#/components/schemas/Error"
-  /friend/request/{userName1}/{userName1}:
+  /applications/{userName1}/{userName1}:
     post:
       summary: Заявка в друзья
       operationId: sendFriendRequest
@@ -65,11 +65,11 @@ paths:
           content: {}
         'default':
           description: Неожиданная ошибка
-          content: 
+          content:
             application/json;charset=UTF-8:
               schema:
                 $ref: "#/components/schemas/Error"
-  /friend/accept/{application_id}:
+  /applications/accept/{application_id}:
     post:
       summary: Принять заявку
       operationId: acceptFriend
@@ -90,11 +90,11 @@ paths:
           content: {}
         'default':
           description: Неожиданная ошибка
-          content: 
+          content:
             application/json;charset=UTF-8:
               schema:
                 $ref: "#/components/schemas/Error"
-  /friend/refuse/{application_id}:
+  /applications/refuse/{application_id}:
     post:
       summary: отклонить заявку
       operationId: refuseFriend
@@ -115,7 +115,7 @@ paths:
           content: {}
         'default':
           description: Неожиданная ошибка
-          content: 
+          content:
             application/json;charset=UTF-8:
               schema:
                 $ref: "#/components/schemas/Error"
@@ -145,13 +145,13 @@ paths:
           content: {}
         'default':
           description: Неожиданная ошибка
-          content: 
+          content:
             application/json;charset=UTF-8:
               schema:
                 $ref: "#/components/schemas/Error"
   /applications/outgoing/{userName}:
     get:
-      summary: посмотреть исходящие заявки
+      summary: получение исходящиъ заявок
       operationId: getOutgoingApplications
       parameters:
         - name: userName
@@ -175,7 +175,7 @@ paths:
           content: {}
         'default':
           description: Неожиданная ошибка
-          content: 
+          content:
             application/json;charset=UTF-8:
               schema:
                 $ref: "#/components/schemas/Error"
@@ -205,7 +205,7 @@ paths:
           content: {}
         'default':
           description: Неожиданная ошибка
-          content: 
+          content:
             application/json;charset=UTF-8:
               schema:
                 $ref: "#/components/schemas/Error"
@@ -231,24 +231,60 @@ paths:
       responses:
         '200':
           description: статус получен
-          content: {}
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: string
         '400':
           description: Пользователь не найден
           content: {}
         'default':
           description: Неожиданная ошибка
-          content: 
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /delete/{userName1}/{userName1}:
+    post:
+      summary: Удалить друга
+      operationId: delFriend
+      parameters:
+        - name: userName1
+          in: path
+          required: true
+          description: Имя пользователя
+          schema:
+            type: string
+            format: uuid
+        - name: userName2
+          in: path
+          required: true
+          description: Имя друга
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Друг удалил
+          content: {}
+        '400':
+          description: Пользователь не найден
+          content: {}
+        '401':
+          description: Пользователи не являются друзьями
+          content: {}
+        'default':
+          description: Неожиданная ошибка
+          content:
             application/json;charset=UTF-8:
               schema:
                 type: string
-
-
 
 components:
   schemas:
     Error:
       type: object
-      required: 
+      required:
         - code
         - message
       properties:
@@ -256,7 +292,7 @@ components:
           type: integer
         message:
           type: string
-    Application:
+    User:
       type: object
       required: 
         - id
@@ -266,9 +302,9 @@ components:
           type: integer
         userName:
           type: string
-    User:
+    Application:
       type: object
-      required: 
+      required:
         - id
         - userName
       properties:
