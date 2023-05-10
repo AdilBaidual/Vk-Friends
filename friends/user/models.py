@@ -8,6 +8,6 @@ class FriendList(models.Model):
     friend = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Application(models.Model):
-    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='applications')
-    user2 = models.ForeignKey(User, on_delete=models.CASCADE)
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='outgoing')
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='incoming')
 
